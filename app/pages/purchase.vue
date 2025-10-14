@@ -10,15 +10,15 @@
                 </div>
                 <div>
                     氏名 必須
-                    <p><input type="text" placeholder="性" v-model="userInfo.shimei" /><input type="text" placeholder="名" v-model="userInfo.miyoji" /></p>
+                    <p><input type="text" placeholder="性" v-model="userInfo.shimei" require /><input type="text" placeholder="名" v-model="userInfo.miyoji" require/></p>
                     電話番号 必須
-                    <p><input type="number" placeholder="08012345678" v-model="userInfo.phoneNumber" /></p>
+                    <p><input type="number" placeholder="08012345678" v-model="userInfo.phoneNumber" require /></p>
                     郵便番号 必須
-                    <p><input type="number" placeholder="00000000" /></p>
+                    <p><input type="number" placeholder="00000000" v-model="userInfo.postalCode" require /></p>
                     
                     <p>都道府県 必須</p>
                         <label for="pref">都道府県を選択：</label>
-                        <select v-model="selectedPlace" id="pref">
+                        <select v-model="userInfo.selectedPlace" id="pref">
                         <option disabled value="">選択してください</option>
                         <option
                             v-for="(name, code) in todoData"
@@ -29,13 +29,13 @@
                         </option>
                         </select>
 
-                        <p>選択された都道府県コード: {{ selectedPlace }}</p>
-                        <p v-if="todoData">選択された都道府県名: {{ (todoData[selectedPlace] || '') }}</p>
+                        <p>選択された都道府県コード: {{ userInfo.selectedPlace }}</p>
+                        <p v-if="todoData">選択された都道府県名: {{ (todoData[userInfo.selectedPlace] || '') }}</p>
                     番地 必須
-                    <p><input type="text" /></p>
+                    <p><input type="text" v-model="userInfo.houseNumber"/></p>
 
                     建物名・部屋番号
-                    <p><input type="text" /></p>
+                    <p><input type="text" v-model="userInfo.roomName" /></p>
                 </div>
             </div>
             <div>
@@ -52,6 +52,7 @@
                 <p>あなたが選択した項目：{{ radio }}</p>
             </div>
             <div>
+                <UButton label="Open" color="neutral" variant="subtle" @click="open" />
                 <p><button @click="goPurchaseDetails()" >次へ進む</button></p>
                 <p><button @click="$router.push('/')">戻る</button></p>
             </div>
@@ -60,11 +61,7 @@
 </template>
 
 <script setup lang="ts" >
-import {ref, reactive, watch} from "vue"
-import axios from 'axios'
-
 /* 
-
 ※最後に確認
 ・必要な処理を全てチェックしたか？
 ・AIにRV
@@ -84,35 +81,46 @@ import axios from 'axios'
     - MSG もどこかに定数として置いておく
 
 */
+import {ref, reactive, watch, watchEffect} from "vue"
+import axios from 'axios'
 
-/* Storeに保存して遷移先で取得する、戻る押下時に何か値を保存していた場合は再度反映する */
+/* 
+- Storeに保存して遷移先(ダイアログ)で取得する.
+- 戻る押下時に何か値を保存していた場合は再度反映する 
+*/
+//const 
 const radio = ref("クレジットカード")
-const selectedPlace = ref("")
+// const selectedPlace = ref("")
 /* 
 API取得して表示するのか? > 都道府県のデータはNuxt Contentで静的データを読み込むのか？ 　
 */
-const todoData = ref(null)
+ const todoData = ref(null)
 
 const url = ref(`https://madefor.github.io/jisx0401/api/v1/jisx0401-ja.json`) 
-todoData.value = null
 axios
     .get(url.value)
-    .then((res) => todoData.value = res.data)
+    .then(async (res) => todoData.value = res.data)
     .catch((error) => todoData.value = error)
 
   console.log("todata is:"+JSON.stringify(todoData.value))
 
-const userInfo = reactive({
+let userInfo = reactive({
     shimei :"",
     miyoji :"",
-    phoneNumber:""
+    phoneNumber:null,
+    // todoData:null
+    postalCode:null,
+    selectedPlace:"",
+    houseNumber:null,
+    roomName:"",
+    Prefecture:""
 })
 
-watch(userInfo, (val) => {
-  if (!val) return;
-  console.log(`userInfo:${JSON.stringify(userInfo)}`)
-  //setTimeout(() => (userInfo.value = false), 2000);
-});
+//debug .
+ watchEffect(()=>{
+            userInfo.Prefecture = radio.value;
+            console.log(`userInfo:${JSON.stringify(userInfo)}`)
+        })
 console.log("userinfo")
 
 
