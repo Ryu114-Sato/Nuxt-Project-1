@@ -8,7 +8,7 @@
                     ※配送先住所に誤りがある場合は、住所不明のため配送不可となります。送付先ご住所。郵便番号に誤り
                     がないか十分にご確認をお願いいたします。
                 </div>
-                <ModalExample v-show="isOpen" />
+                <ModalExample :isOpen="isOpen" />
                 <div>
                     氏名 必須
                     <p><input type="text" placeholder="性" v-model="userInfo.shimei" require /><input type="text" placeholder="名" v-model="userInfo.miyoji" require/></p>
@@ -53,7 +53,6 @@
                 <p>あなたが選択した項目：{{ radio }}</p>
             </div>
             <div>
-                <UButton label="Open" color="neutral" variant="subtle" @click="open" />
                 <p><button @click="goPurchaseDetails()" :isOpen="isOpen">次へ進む</button></p>
                 <p><button @click="$router.push('/')">戻る</button></p>
             </div>
@@ -84,7 +83,7 @@
 */
 import {ref, reactive, watch, watchEffect} from "vue"
 import axios from 'axios'
-import ModalExample from "../components/ModalExample.vue"
+// import ModalExample from "../components/ModalExample.vue"
 
 /* 
 - Storeに保存して遷移先(ダイアログ)で取得する.
@@ -122,6 +121,7 @@ let isOpen : boolean = false;
 const goPurchaseDetails = (()=>{
 
 isOpen = true;
+console.log(`goPurchaseDetails_isOpen:${isOpen}`)
 })
 
 //debug .
