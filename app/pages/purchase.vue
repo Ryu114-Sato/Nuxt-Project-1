@@ -53,7 +53,7 @@
                 <p>あなたが選択した項目：{{ radio }}</p>
             </div>
             <div>
-                <p><button @click="goPurchaseDetails()" :isOpen="isOpen">次へ進む</button></p>
+                <p><button @click="goPurchaseDetails()">次へ進む</button></p>
                 <p><button @click="$router.push('/')">戻る</button></p>
             </div>
         </form>
@@ -83,7 +83,7 @@
 */
 import {ref, reactive, watch, watchEffect} from "vue"
 import axios from 'axios'
-// import ModalExample from "../components/ModalExample.vue"
+import ModalExample from '~/components/ModalExample.vue';
 
 /* 
 - Storeに保存して遷移先(ダイアログ)で取得する.
@@ -117,10 +117,10 @@ let userInfo = reactive({
     Prefecture:""
 })
 
-let isOpen : boolean = false;
+let isOpen = ref<boolean>(false)
 const goPurchaseDetails = (()=>{
 
-isOpen = true;
+isOpen.value = true;
 console.log(`goPurchaseDetails_isOpen:${isOpen}`)
 })
 

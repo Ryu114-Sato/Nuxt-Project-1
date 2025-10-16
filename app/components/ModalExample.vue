@@ -1,5 +1,5 @@
 <template>
-  <UModal v-model:open="open" :dismissible="false">
+  <UModal v-if="open" :dismissible="false">
     <!-- <UButton label="Open" color="neutral" variant="subtle" /> -->
 
     <template #content>
@@ -14,27 +14,27 @@
 import {ref, defineComponent, watchEffect} from "vue"
 export default defineComponent({
   name:'ModalExample',
+  props:{
+isOpen :{
+  type :Boolean
+}
+  },
   setup(props, ctx) {
       
 const open = ref(false)
-
-/* 定数 */
-props = defineProps({
-  //v-modelで親側の値をデフォルトでpropsに受け取ることが可能
-  isOpen: { type: Boolean },
-});
-
 open.value = props.isOpen;
+
+console.log(`ModalExample_isOpen:${props.isOpen}`)
+console.log(`ModalExample_open:${open.value}`)
+
 
 //debug .
  watchEffect(()=>{
-            console.log(`ModalExample_open:${JSON.stringify(open.value)}`)
+            console.log(`ModalExample_watch_open:${JSON.stringify(open.value)}`)
         })
 return{
   open,
 }
-
-
   },
 })
 
