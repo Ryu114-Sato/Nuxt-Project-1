@@ -1,21 +1,52 @@
 <template>
-  <div>
-    <h1>Test</h1>
-    <button @click="goToPurchase">購入する</button>
+  <div class="p-10">
+    <div class="bg-green-500 text-white text-center py-6 rounded-lg shadow-lg">
+      Tailwind動作確認OK
+    </div>
+  </div>
+  <div class="p-8 space-y-6">
+    <h1 class="text-xl font-semibold text-gray-800">Tailwindで作るボタン</h1>
+    <!-- Primary -->
+    <button
+      class="flex agp-4 flex-wrap font-medium px-4 py-2 rounded-md hover:bg-blue-700 transition"
+      @click="goToPurchase()"
+    >
+      購入する
+    </button>
     <br />
-    <hr>
-    <NuxtLink to="/purchase" >購入する</NuxtLink>
-    <hr/>
-    <button @click="$router.push('/purchase')">購入する</button>
+    <h2 class="text-xl font-semibold">
+      <NuxtLink to="/purchase">購入する</NuxtLink>
+    </h2>
+    <hr />
+    <div class="bg-white p-6 rounded-xl shadow-md">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">Tailwindの基本</h2>
+      <p class="text-gray-600 mb-4">これはTailwindの最もシンプルなカード</p>
+      <!-- Outline -->
+      <button
+        @click="goToPurchase()"
+        class="border border-gray-400 text-gray-700 font-medium px-4 py-2 rounded-md hover:bg-gray-100 transition"
+      >
+        購入する
+      </button>
+    </div>
+    <!-- Danger -->
+    <button
+      class="bg-red-600 text-white font-medium px-4 py-2 rounded-md hover:bg-red-700 transition"
+    >
+      Danger
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import {useRouter, useRoute} from 'vue-router'
-const router = useRouter()
+import { useRouter, useRoute } from "vue-router";
+import { ref } from "vue";
 
+const router = useRouter();
+const route = useRoute();
+const indexProp = ref("indexのプロップスの値です");
 const goToPurchase = () => {
-  console.log('goToPurchase');
-  router.push("/purchase")
-}
+  console.log(`goToPurchase_Current Path:${route.fullPath}`);
+  router.push("/purchase");
+};
 </script>

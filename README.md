@@ -20,6 +20,16 @@ yarn install
 bun install
 ```
 
+## Re setup
+
+```bash
+# package-lock.json を再構築
+rm -rf node_modules package-lock.json
+
+npm install
+
+```
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:
@@ -74,47 +84,80 @@ bun run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-
 ## Other commands .
 
-### npx nuxt dev 
- 起動
+### npx nuxt dev
 
+起動
+
+### npx nuxt -v
+
+| 種類                | バージョン | 内容                                            |
+| ------------------- | ---------- | ----------------------------------------------- |
+| **Nuxt CLI (nuxi)** | 3.28.0     | 開発用 CLI。`nuxi dev`, `nuxi build` などを実行 |
+| **Nuxt 本体**       | 4.1.2      | 実際にアプリケーションを構成するフレームワーク  |
 
 ##
+
 ### git init
+
 現在のディレクトリで新しい Git リポジトリを初期化します。 （これにより、バージョン管理が開始されます。）
+
 ### git add README.md
+
 README.md ファイルをステージングエリアに追加します。 （全ファイルを追加する場合は git add --all とします。）
+
 ### git commit -m "first commit"
+
 ステージングエリアにある変更を「first commit」というメッセージでコミットします。 （最初の変更履歴を記録します。）
+
 ### git branch -M main
+
 現在のブランチの名前を強制的に「main」に変更します。 （ローカルリポジトリのデフォルトブランチを「main」に設定します。）
+
 ### git remote add origin https://github.com/Ryu114-Sato/Nuxt-Project-1.git
+
 GitHub 上のリポジトリ URL を「origin」という名前でリモートリポジトリとして登録します。 （ローカルリポジトリとリモートリポジトリを連携させるための設定です。）
 
 ### git push -u origin main --force
-最初にgithubにpushする時のみforce コマンドでmainブランチを上書きする
+
+最初に github に push する時のみ force コマンドで main ブランチを上書きする
 
 ### git push -u origin feature_202504
+
 ローカルの「main」ブランチをリモートの「origin」リポジトリにプッシュし、今後のプッシュ・プルの対象として追跡関係を設定します。 （これにより、リモートにも初回のコミット内容が反映されます。）
+
 ### git branch feature_202504
 
-## Typescript 
+## Typescript
 
--  数値型
-let num: number = 42;
--  文字列型
-let str: string = "こんにちは";
--  真偽値型
-let isActive: boolean = true;
--  配列型
-let numbers: number[] = [1, 2, 3];
--  オブジェクト型
-let person: { name: string; age: number } = { name: "太郎", age: 25 };
--  ユニオン型（複数の型を許容）
-let id: number | string = "12345";
--  any型（任意の型を許容）
-let anything: any = "何でもOK";
--  タプル型（固定長の配列）
-let tuple: [string, number] = ["TypeScript", 2023];
+- 数値型
+  let num: number = 42;
+- 文字列型
+  let str: string = "こんにちは";
+- 真偽値型
+  let isActive: boolean = true;
+- 配列型
+  let numbers: number[] = [1, 2, 3];
+- オブジェクト型
+  let person: { name: string; age: number } = { name: "太郎", age: 25 };
+- ユニオン型（複数の型を許容）
+  let id: number | string = "12345";
+- any 型（任意の型を許容）
+  let anything: any = "何でも OK";
+- タプル型（固定長の配列）
+  let tuple: [string, number] = ["TypeScript", 2023];
+
+# TailwindCSS (テイルウィンド)
+
+(環境設定)[https://tailwindcss.com/docs/installation/framework-guides/nuxt]
+
+## ユーティリティクラスの例：
+
+- p-4 　　　　：パディングを 16px 追加
+- bg-blue-500：背景色を青に設定
+- text-white ：テキスト色を白に設定
+- rounded-lg ：角を丸くする
+- max-w-md 　：要素の最大幅を「medium」に制限
+- mx-auto 　　：要素を左右中央に配置
+- mt-10 　　　：上方向に 40px のマージンを追加

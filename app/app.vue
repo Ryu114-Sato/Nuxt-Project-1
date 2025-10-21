@@ -1,14 +1,9 @@
 <template>
-  <div>
-    <NuxtPage  />
-  </div>
+  <NuxtPage :testPs="testSt" />
 </template>
 
 <script setup lang="ts">
-import {ref, } from "vue"
+import { ref } from "vue";
 
-const open = ref(true);
-
-
-
+const testSt = ref("プロップスです");
 </script>
