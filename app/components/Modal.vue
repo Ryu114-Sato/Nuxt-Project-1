@@ -8,7 +8,7 @@
 <script lang="ts">
 import { ref, defineComponent, watchEffect, watch } from "vue";
 export default defineComponent({
-  name: "modalExample",
+  //name: "modalExample",
   props: {
     ModalFlg: {
       type: Boolean,
