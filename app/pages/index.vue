@@ -5,17 +5,8 @@
     </div>
   </div>
   <div class="p-8 space-y-6">
-    <h1 class="text-xl font-semibold text-gray-800">Tailwindで作るボタン</h1>
-    <!-- Primary -->
-    <button
-      class="flex agp-4 flex-wrap font-medium px-4 py-2 rounded-md hover:bg-blue-700 transition"
-      @click="goToPurchase()"
-    >
-      購入する
-    </button>
-    <br />
     <h2 class="text-xl font-semibold">
-      <NuxtLink to="/purchase">購入する</NuxtLink>
+      <NuxtLink to="/purchase">NuxtLink 購入する</NuxtLink>
     </h2>
     <hr />
     <div class="bg-white p-6 rounded-xl shadow-md">
@@ -29,22 +20,14 @@
         購入する
       </button>
     </div>
-    <!-- Danger -->
-    <button
-      class="bg-red-600 text-white font-medium px-4 py-2 rounded-md hover:bg-red-700 transition"
-    >
-      Danger
-    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router";
-import { ref } from "vue";
 
 const router = useRouter();
 const route = useRoute();
-const indexProp = ref("indexのプロップスの値です");
 const goToPurchase = () => {
   console.log(`goToPurchase_Current Path:${route.fullPath}`);
   router.push("/purchase");

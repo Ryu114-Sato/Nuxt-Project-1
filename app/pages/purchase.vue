@@ -8,7 +8,7 @@
           ※配送先住所に誤りがある場合は、住所不明のため配送不可となります。送付先ご住所。郵便番号に誤り
           がないか十分にご確認をお願いいたします。
         </div>
-        <Modal :ModalFlg="ModalFlg" v-show="ModalFlg" />
+        <Modal v-model="ModalFlg" />
         <div>
           氏名 必須
           <p>
@@ -33,17 +33,16 @@
               require
             />
           </p>
-          郵便番号 必須
-          <p>
+          <label
+            >郵便番号 必須
             <input
               type="number"
-              placeholder="00000000"
+              placeholder="123-4567"
               v-model="userInfo.postalCode"
               require
             />
-          </p>
-
-          <p>都道府県 必須</p>
+          </label>
+          <p><label>都道府県 必須</label></p>
           <label for="pref">都道府県を選択：</label>
           <select v-model="userInfo.selectedPlace" id="pref">
             <option disabled value="">選択してください</option>
@@ -133,11 +132,14 @@ API取得して表示するのか? > 都道府県のデータはNuxt Contentで�
 const todoData = ref(null);
 
 const url = ref(`https://madefor.github.io/jisx0401/api/v1/jisx0401-ja.json`);
-axios
-  .get(url.value)
-  .then(async (res) => (todoData.value = res.data))
-  .catch((error) => (todoData.value = error));
-
+try {
+  axios
+    .get(url.value)
+    .then(async (res) => await (todoData.value = res.data))
+    .catch(async (error) => await (todoData.value = error));
+} catch (e) {
+  console.log("e" + e);
+}
 console.log("todata is:" + JSON.stringify(todoData.value));
 
 let userInfo = reactive({
