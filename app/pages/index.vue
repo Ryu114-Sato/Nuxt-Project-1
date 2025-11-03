@@ -20,11 +20,20 @@
         購入する
       </button>
     </div>
+    <div class="border-2">
+      <label class="p-1">注文数を選択してください</label>
+      <p><button class="p-3" @click="incrementPinia">+</button></p>
+      <button class="p-3" @click="decrementPinia">-</button>
+      <p class="p-1">Current Count. {{ store.count }}</p>
+      <p class="p-1">double Count. {{ doubleValue }}</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useCounterStore } from "@/composables/index";
 
 const router = useRouter();
 const route = useRoute();
@@ -32,4 +41,14 @@ const goToPurchase = () => {
   console.log(`goToPurchase_Current Path:${route.fullPath}`);
   router.push("/purchase");
 };
+const store = useCounterStore();
+store.$patch({ count: store.count + 1 });
+const incrementPinia = () => {
+  store.increment();
+};
+const decrementPinia = () => {
+  store.decrement();
+};
+
+const doubleValue = computed(() => store.doubleCount);
 </script>

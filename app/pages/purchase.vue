@@ -1,98 +1,131 @@
 <template>
-  <div>
-    <h1>ご購入手続き</h1>
-    <h2>配送先情報</h2>
+  <div class="p-8 items-center">
+    <h1 class="text-xl font-semibold">ご購入手続き</h1>
+    <h2 class="text-lg font-semibold py-4 space-y-6">配送先情報</h2>
     <form @submit.prevent="validate">
-      <div>
-        <div>
-          ※配送先住所に誤りがある場合は、住所不明のため配送不可となります。送付先ご住所。郵便番号に誤り
-          がないか十分にご確認をお願いいたします。
+      <div class="text-xs p-4 border bg-gray-50">
+        <div class="border text-orange-300 p-3 bg-orange-50">
+          ※配送先住所に誤りがある場合は、住所不明のため配送不可となります。送付先ご住所。郵便番号に誤りがないか十分にご確認をお願いいたします。
         </div>
-        <Transition>
+        <Transition class="animate-pulse">
           <Modal v-model="ModalFlg" :userInfo="userInfo" />
         </Transition>
 
         <div>
-          氏名 必須
+          <div class="flex gap-3 py-2">
+            <label class="text-gray-400">氏名</label>
+            <label class="text-red-500 font-medium">必須</label>
+          </div>
           <p>
             <input
               type="text"
               placeholder="性"
               v-model="userInfo.firstName"
               require
+              class="border"
             /><input
               type="text"
               placeholder="名"
               v-model="userInfo.lastName"
               require
+              class="border"
             />
           </p>
-          電話番号 必須
+          <div class="flex gap-3 py-2">
+            <label class="text-gray-400">電話番号</label>
+            <label class="text-red-500 font-medium">必須</label>
+          </div>
           <p>
             <input
               type="number"
               placeholder="08012345678"
               v-model="userInfo.phoneNumber"
               require
+              class="border"
             />
           </p>
-          <label
-            >郵便番号 必須
-            <input
-              type="number"
-              placeholder="123-4567"
-              v-model="userInfo.postalCode"
-              require
-            />
-          </label>
-          <p><label>都道府県 必須</label></p>
-          <label for="pref">都道府県を選択：</label>
-          <select v-model="userInfo.address1" id="pref">
-            <option disabled value="">選択してください</option>
+          <div class="flex gap-3 py-2">
+            <label class="text-gray-400">郵便番号</label>
+            <label class="text-red-500 font-medium">必須</label>
+          </div>
+
+          <input
+            type="number"
+            placeholder="123-4567"
+            v-model="userInfo.postalCode"
+            require
+            class="border"
+          />
+          <div class="flex gap-3 py-2">
+            <label class="text-gray-400">都道府県</label>
+            <label class="text-red-500 font-medium"> 必須 </label>
+          </div>
+          <select class="border" v-model="userInfo.address1" id="pref">
+            <option class="border" disabled value="">東京</option>
             <option v-for="(name, code) in todoData" :key="code" :value="code">
               {{ name }}
             </option>
           </select>
 
-          <p>選択された都道府県コード: {{ userInfo.address1 }}</p>
-          <p v-if="todoData">
-            選択された都道府県名: {{ todoData[userInfo.address1] || "" }}
-          </p>
-          番地 必須
-          <p><input type="text" v-model="userInfo.address2" /></p>
+          <div class="flex gap-3 py-2">
+            <label class="text-gray-400">番地 </label
+            ><lavel class="text-red-500 font-medium">必須</lavel>
+          </div>
 
-          建物名・部屋番号
-          <p><input type="text" v-model="userInfo.address3" /></p>
+          <p>
+            <input type="text" class="border" v-model="userInfo.address2" />
+          </p>
+
+          <div class="flex gap-3 py-2">
+            <label class="text-gray-400">建物名・部屋番号</label>
+          </div>
+
+          <p>
+            <input type="text" class="border" v-model="userInfo.address3" />
+          </p>
         </div>
       </div>
-      <div>
-        <h2>お支払い方法</h2>
-        <input
-          type="radio"
-          id="option1"
-          v-model="radio"
-          value="クレジットカード"
-        />
-        <label for="クレジットカード">クレジットカード</label>
-        <br />
-        <input type="radio" id="option2" v-model="radio" value="コンビニ決済" />
-        <label for="コンビニ決済">コンビニ決済</label>
-        <br />
-        <input type="radio" id="option3" v-model="radio" value="キャリア決済" />
-        <label for="キャリア決済">キャリア決済</label>
-        <br />
-        <p>あなたが選択した項目：{{ radio }}</p>
-        <div class="border-2">
-          <label class="p-1">注文数を選択してください</label>
-          <p><button class="p-3" @click="incrementPinia">+</button></p>
-          <button class="p-3" @click="decrementPinia">-</button>
-          <p class="p-1">Current Count. {{ store.count }}</p>
-          <p class="p-1">double Count. {{ doubleValue }}</p>
+      <div class="gap-3 py-2 w-full">
+        <h2 class="text-lg font-semibold py-4 space-y-6">お支払い方法</h2>
+        <div class="text-sm">
+          <label class="border-2" for="クレジットカード">
+            <input
+              type="radio"
+              id="option1"
+              v-model="radio"
+              value="クレジットカード"
+            />
+            クレジットカード</label
+          >
+          <br />
+          <label class="border-2" for="コンビニ決済">
+            <input
+              type="radio"
+              id="option2"
+              v-model="radio"
+              value="コンビニ決済"
+            />
+            コンビニ決済</label
+          >
+          <br />
+          <label class="border-2" for="キャリア決済">
+            <input
+              type="radio"
+              id="option3"
+              v-model="radio"
+              value="キャリア決済"
+            />
+            キャリア決済</label
+          >
         </div>
       </div>
-      <div>
-        <p><button @click="goPurchaseDetails()">次へ進む</button></p>
-        <p><button @click="$router.push('/')">戻る</button></p>
+      <div class="py-4 justify-center text-center">
+        <p class="my-2 border-2 mx-11">
+          <button @click="goPurchaseDetails()">次へ進む</button>
+        </p>
+        <p class="border-2 mx-11">
+          <button @click="$router.push('/')">戻る</button>
+        </p>
       </div>
     </form>
   </div>
@@ -122,7 +155,6 @@
 import { ref, reactive, watch, watchEffect, computed } from "vue";
 import axios from "axios";
 import { z } from "zod";
-import { useCounterStore } from "@/composables/index";
 import { OrderInputSchema, type OrderInput } from "~/composables/order";
 
 const userInfo = reactive<OrderInput>({
@@ -135,17 +167,6 @@ const userInfo = reactive<OrderInput>({
   address3: "",
   prefecture: "",
 });
-
-const store = useCounterStore();
-store.$patch({ count: store.count + 1 });
-const incrementPinia = () => {
-  store.increment();
-};
-const decrementPinia = () => {
-  store.decrement();
-};
-
-const doubleValue = computed(() => store.doubleCount);
 
 /* 
 - Storeに保存して遷移先(ダイアログ)で取得する.
