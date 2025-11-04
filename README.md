@@ -162,3 +162,39 @@ GitHub 上のリポジトリ URL を「origin」という名前でリモート�
 - mx-auto 　　：要素を左右中央に配置
 - mt-10 　　　：上方向に 40px のマージンを追加
 - flex : <div>タグ内の要素を横並びにできる
+
+## Responsive Design
+
+- https://qiita.com/NaaaRiii/items/af1a5ee5cc35e56dfb2e
+
+**Tailwind はモバイルファーストの設計思想に基づいて設計されています**
+
+- モバイルファーストの例
+
+```
+<div className="text-sm sm:text-base lg:text-lg">
+  {/*
+    - デフォルト（モバイル）: text-sm (14px)
+    - 640px以上: text-base (16px)
+    - 1024px以上: text-lg (18px)
+  */}
+</div>
+```
+
+## Tailwind では、一貫性のあるデザインを実現するためにスケール値というシステムを採用しています。
+
+1. これは、spacing（余白）、font-size（文字サイズ）、width（幅）などの値を統一された基準で管理する仕組みです。
+
+2. 基本単位: 1 単位 = 0.25rem = 4px（ブラウザのデフォルトフォントサイズが 16px の場合）
+
+3. よく使われるスケール値：
+
+- 1 = 4px
+- 2 = 8px
+- 3 = 12px
+- 4 = 16px ← gap-4、p-4 などでよく使用
+- 6 = 24px
+- 8 = 32px
+- 12 = 48px
+- 16 = 64px
+- このため、gap-4 は「4 × 4px = 16px」の間隔を意味します。

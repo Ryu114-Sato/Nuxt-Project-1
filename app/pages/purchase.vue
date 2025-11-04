@@ -85,38 +85,40 @@
           </p>
         </div>
       </div>
-      <div class="gap-3 py-2 w-full">
+      <div class="gap-3 py-2">
         <h2 class="text-lg font-semibold py-4 space-y-6">お支払い方法</h2>
-        <div class="text-sm">
-          <label class="border-2" for="クレジットカード">
-            <input
-              type="radio"
-              id="option1"
-              v-model="radio"
-              value="クレジットカード"
-            />
-            クレジットカード</label
-          >
-          <br />
-          <label class="border-2" for="コンビニ決済">
-            <input
-              type="radio"
-              id="option2"
-              v-model="radio"
-              value="コンビニ決済"
-            />
-            コンビニ決済</label
-          >
-          <br />
-          <label class="border-2" for="キャリア決済">
-            <input
-              type="radio"
-              id="option3"
-              v-model="radio"
-              value="キャリア決済"
-            />
-            キャリア決済</label
-          >
+
+        <div class="border-2 p-2 text-sm" for="クレジットカード">
+          <input
+            type="radio"
+            id="option1"
+            v-model="radio"
+            value="クレジットカード"
+            class="m-2"
+          />
+          クレジットカード(Visa,MasterCard,JCB, American Express)
+        </div>
+        <br />
+        <div class="border-2 p-2 text-sm" for="コンビニ決済">
+          <input
+            type="radio"
+            id="option2"
+            v-model="radio"
+            value="コンビニ決済"
+            class="m-2"
+          />
+          コンビニ決済
+        </div>
+        <br />
+        <div class="border-2 p-2 text-sm" for="キャリア決済">
+          <input
+            type="radio"
+            id="option3"
+            v-model="radio"
+            value="キャリア決済"
+            class="m-2"
+          />
+          キャリア決済
         </div>
       </div>
       <div class="py-4 justify-center text-center">
