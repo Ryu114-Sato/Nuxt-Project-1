@@ -1,8 +1,16 @@
 <template>
-  <div class="w-full max-w-sm sm:max-w-md lg:max-w-4xl mx-auto px-2">
+  <div :class="defaultClass">
     <slot />
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+
+const defaultClass = ref(
+  "w-full max-w-sm sm:max-w-md lg:max-w-4xl mx-auto px-2"
+);
+</script>
 
 <style>
 /*

@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
 
 export const useUserInfoStore = defineStore("user", {
-  state: () => ({
-    userInfo: {},
-  }),
+  state: () => {
+    return { userInfo: {} };
+  },
   getters: {},
   actions: {
     upDataInfo(info: {}) {
+      console.log(`user.ts_info:${info}`);
       this.userInfo = info;
     },
     initUserInfo() {

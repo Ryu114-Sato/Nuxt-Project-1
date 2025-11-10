@@ -8,10 +8,6 @@
         <div class="border text-orange-300 p-3 bg-orange-50">
           ※配送先住所に誤りがある場合は、住所不明のため配送不可となります。送付先ご住所。郵便番号に誤りがないか十分にご確認をお願いいたします。
         </div>
-        <Transition class="animate-pulse">
-          <Modal v-model="ModalFlg" :userInfo="userInfo" />
-        </Transition>
-
         <div class="text-xs md:text-sm">
           <div class="mb-1 flex gap-2 py-2">
             <label class="text-gray-400">氏名</label>
@@ -61,8 +57,8 @@
             <label class="text-gray-400">都道府県</label>
             <label class="text-red-500 font-medium"> 必須 </label>
           </div>
-          <select :class="inputClass" v-model="userInfo.address1" id="pref">
-            <option :class="inputClass" disabled value="">東京</option>
+          <select v-model="userInfo.address1" id="pref">
+            <option disabled value="">東京</option>
             <option v-for="(name, code) in todoData" :key="code" :value="code">
               {{ name }}
             </option>
@@ -101,7 +97,7 @@
             <input
               type="radio"
               id="option1"
-              value="クレジットカード"
+              value="クレジットカード(Visa,MasterCard,JCB, American Express)"
               v-model="radio"
             />
             <span class="text-sm text-gray-900"
@@ -137,6 +133,25 @@
         </p>
       </div>
     </form>
+    <ModalNew v-model="ModalFlg" @confirm="onConfirm()" @cancel="onCancel()">
+      <template #title>購入内容確認</template>
+      <div class="space-y-2 text-sm">
+        <h3 class="text-lg font-semibold text-gray-900">お支払い方法</h3>
+        <div :class="ModalClass">
+          {{ userInfo.prefecture }}
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900">配送先</h3>
+        <div :class="ModalClass">
+          <p>
+            <span class="font-bold"></span>{{ userInfo.lastName }}
+            {{ userInfo.firstName }}
+          </p>
+          <p><span class="font-medium"></span>{{ userInfo.phoneNumber }}</p>
+          <p><span class="font-medium">〒</span>{{ userInfo.postalCode }}</p>
+          <p><span class="font-medium"></span>{{ userInfo.address1 }}</p>
+        </div>
+      </div>
+    </ModalNew>
   </div>
 </template>
 
@@ -165,7 +180,8 @@ import { ref, reactive, watch, watchEffect, computed } from "vue";
 import axios from "axios";
 import { z } from "zod";
 import { OrderInputSchema, type OrderInput } from "~/composables/order";
-
+import ModalNew from "@/components/ModalNew.vue";
+import { useRouter } from "vue-router";
 const userInfo = reactive<OrderInput>({
   firstName: "",
   lastName: "",
@@ -189,6 +205,10 @@ const btnClass = ref(
   "text-white bg-black py-2 border-2 mx-11 hover:border-indigo-400 transition"
 );
 
+const ModalClass = ref(
+  "rounded-md border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700"
+);
+
 /* 
 - Storeに保存して遷移先(ダイアログ)で取得する.
 - 戻る押下時に何か値を保存していた場合は再度反映する 
@@ -200,7 +220,7 @@ const props = defineProps({
 });
 
 //const
-const radio = ref("クレジットカード");
+const radio = ref("クレジットカード(Visa,MasterCard,JCB, American Express)");
 // const address1 = ref("")
 /* 
 API取得して表示するのか? > 都道府県のデータはNuxt Contentで静的データを読み込むのか？ 　
@@ -224,8 +244,19 @@ const goPurchaseDetails = () => {
   console.log(`goPurchaseDetails_ModalFlg:${ModalFlg}`);
 };
 
+const router = useRouter();
+const onConfirm = () => {
+  console.log("onConfirmが押下されました");
+  router.push("/");
+};
+
+function onCancel() {
+  console.log("onCancelが押下されました");
+}
+
 watchEffect(() => {
   userInfo.prefecture = radio.value;
   console.log(`userInfo:${JSON.stringify(userInfo)}`);
+  console.log("ModalFlg", ModalFlg);
 });
 </script>

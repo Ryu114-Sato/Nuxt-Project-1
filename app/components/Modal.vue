@@ -1,10 +1,10 @@
 <template>
-  <div v-if="modelValue" class="bg-indigo-500 p-6 rounded-xl shadow-md">
-    <div role="dialog" aria-model="true" class="p-2 bg-sky-500">
-      <labe class="p-2">購入内容確認</labe>
+  <div v-if="modelValue" class="p-6 rounded-xl shadow-md">
+    <div role="dialog" aria-model="true" class="p-2">
+      <label class="p-2">購入内容確認</label>
       <hr />
-      <h2 class="p-2">お支払い方法</h2>
-      <p class="border-4 gray-500 p-3">{{ userInfo.prefecture }}</p>
+      <h1 class="mb-6 text-2xl md:text-3xl font-bold">お支払い方法</h1>
+      <p :class="infoClass">{{ userInfo.prefecture }}</p>
       <h2>配送先</h2>
       <ul v-show="userInfo" class="border-4 gray-500 p-3">
         <li>{{ userInfo.shimei }}</li>
@@ -41,6 +41,8 @@ import { defineEmits, defineProps, reactive, watchEffect } from "vue";
 import { useUserInfoStore } from "@/composables/user";
 import { storeToRefs } from "pinia"; // state プロパティをリアクティブに保つために使用
 
+const infoClass =
+  "block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500";
 const store = useUserInfoStore();
 const props = defineProps<{
   userInfo: {
