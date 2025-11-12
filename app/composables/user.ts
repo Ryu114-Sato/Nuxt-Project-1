@@ -1,17 +1,32 @@
 import { defineStore } from "pinia";
+import { OrderInputSchema, type OrderInput } from "~/composables/order";
 
 export const useUserInfoStore = defineStore("user", {
   state: () => {
-    return { userInfo: {} };
+    return {
+      userInfo: {
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        postalCode: "",
+        address1: "",
+        address2: "",
+        address3: "",
+        prefecture: "",
+      } as OrderInput,
+    };
   },
   getters: {},
   actions: {
-    upDataInfo(info: {}) {
-      console.log(`user.ts_info:${info}`);
-      this.userInfo = info;
+    setUserInfo(payload: Partial<OrderInput>) {
+      console.log(`user.ts_info:${payload}`);
+      this.userInfo = { ...this.userInfo, ...payload };
     },
-    initUserInfo() {
-      this.userInfo = {};
+    setField<K extends keyof OrderInput>(key: K, value: OrderInput[K]) {
+      this.userInfo[key] = value;
     },
+    // initUserInfo() {
+    //   this.userInfo = {};
+    // },
   },
 });

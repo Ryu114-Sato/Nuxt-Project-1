@@ -1,17 +1,13 @@
 <template>
   <div v-if="modelValue" class="fixed inset-0 z-50">
-    <!-- overlay -->
     <div class="absolute inset-0 bg-black/50" @click="onBackdrop" />
 
-    <!-- panel wrapper -->
     <div class="absolute inset-0 flex items-center justify-center p-4">
-      <!-- panel（スクショ準拠：白・角丸・薄いボーダー・影） -->
       <div
         class="w-full max-w-2xl rounded-lg border border-gray-200 bg-white shadow-lg"
         role="dialog"
         aria-modal="true"
       >
-        <!-- header：左にタイトル、右に× -->
         <div class="flex items-center justify-between border-b px-6 py-4">
           <h2 class="text-base font-semibold text-gray-900">
             <slot name="title">購入内容確認</slot>
@@ -42,7 +38,6 @@
           <slot />
         </div>
 
-        <!-- actions：縦積み（上：主ボタン、下：アウトライン） -->
         <div class="px-6 pb-6">
           <slot name="actions">
             <div class="grid gap-3">
@@ -98,11 +93,11 @@ const close = (st: string) => {
   emit("update:modelValue", false);
 };
 
-function onBackdrop() {
+const onBackdrop = () => {
   if (props.closeOnBackdrop !== false) {
     close("cancel");
   }
-}
+};
 /*
 function onKey(e: KeyboardEvent) {
   if (e.key === "Escape" && props.modelValue) {

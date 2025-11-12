@@ -8,6 +8,9 @@
         <div class="border text-orange-300 p-3 bg-orange-50">
           ※配送先住所に誤りがある場合は、住所不明のため配送不可となります。送付先ご住所。郵便番号に誤りがないか十分にご確認をお願いいたします。
         </div>
+        <div class="text-red-500 font-medium py-5" v-show="validateMsg">
+          ※必須項目を全て入力してください
+        </div>
         <div class="text-xs md:text-sm">
           <div class="mb-1 flex gap-2 py-2">
             <label class="text-gray-400">氏名</label>
@@ -57,7 +60,7 @@
             <label class="text-gray-400">都道府県</label>
             <label class="text-red-500 font-medium"> 必須 </label>
           </div>
-          <select v-model="userInfo.address1" id="pref">
+          <select v-model="userInfo.address1" id="pref" :class="selectClass">
             <option disabled value="">東京</option>
             <option v-for="(name, code) in todoData" :key="code" :value="code">
               {{ name }}
@@ -176,12 +179,12 @@
     - MSG もどこかに定数として置いておく
 
 */
-import { ref, reactive, watch, watchEffect, computed } from "vue";
+import { ref, reactive, isRef, watchEffect, computed } from "vue";
 import axios from "axios";
-import { z } from "zod";
 import { OrderInputSchema, type OrderInput } from "~/composables/order";
 import ModalNew from "@/components/ModalNew.vue";
 import { useRouter } from "vue-router";
+import { useUserInfoStore } from "@/composables/user";
 const userInfo = reactive<OrderInput>({
   firstName: "",
   lastName: "",
@@ -199,6 +202,10 @@ const inputClass = ref(
 
 const labelClass = ref(
   "flex items-center gap-3 border border-gray-300 px-4 py-3 hover:border-indigo-400 transition"
+);
+
+const selectClass = ref(
+  "block rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 hover:border-indigo-400 transition"
 );
 
 const btnClass = ref(
@@ -226,6 +233,7 @@ const radio = ref("クレジットカード(Visa,MasterCard,JCB, American Expres
 API取得して表示するのか? > 都道府県のデータはNuxt Contentで静的データを読み込むのか？ 　
 */
 const todoData = ref(null);
+const validateMsg = ref(false);
 
 const url = ref(`https://madefor.github.io/jisx0401/api/v1/jisx0401-ja.json`);
 try {
@@ -237,16 +245,30 @@ try {
   console.log("e" + e);
 }
 console.log("todata is:" + JSON.stringify(todoData.value));
-
+const hasBlankUserInfo = (userInfo: OrderInput): boolean => {
+  // 空文字 or 空白のみを空扱いにする場合は trim()
+  return (Object.values(userInfo) as unknown[]).some(
+    (v) => String(v ?? "").trim() === ""
+  );
+};
 let ModalFlg = ref<boolean>(false);
 const goPurchaseDetails = () => {
-  ModalFlg.value = true;
-  console.log(`goPurchaseDetails_ModalFlg:${ModalFlg}`);
+  if (hasBlankUserInfo(userInfo)) {
+    validateMsg.value = true;
+    console.log("hasBlankUserInfo(userInfo)", hasBlankUserInfo(userInfo));
+    return;
+  } else {
+    ModalFlg.value = true;
+    console.log(`goPurchaseDetails_ModalFlg:${ModalFlg}`);
+  }
 };
-
+const store = useUserInfoStore();
+const validate = () => {};
 const router = useRouter();
+
 const onConfirm = () => {
   console.log("onConfirmが押下されました");
+  store.setUserInfo(userInfo);
   router.push("/");
 };
 
