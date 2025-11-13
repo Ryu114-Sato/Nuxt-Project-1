@@ -61,7 +61,7 @@
             <label class="text-red-500 font-medium"> 必須 </label>
           </div>
           <select v-model="userInfo.address1" id="pref" :class="selectClass">
-            <option disabled value="">東京</option>
+            <option disabled value="東京">東京</option>
             <option v-for="(name, code) in todoData" :key="code" :value="code">
               {{ name }}
             </option>
@@ -161,10 +161,21 @@
 <script setup lang="ts" >
 import { ref, reactive, isRef, watchEffect, computed } from "vue";
 import axios from "axios";
-import { OrderInputSchema, type OrderInput } from "~/composables/order";
 import ModalNew from "@/components/ModalNew.vue";
 import { useRouter } from "vue-router";
 import { useUserInfoStore } from "@/composables/user";
+
+interface OrderInput {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  postalCode: string;
+  address1: string;
+  address2: string;
+  address3: string;
+  prefecture: string;
+}
+
 const userInfo = reactive<OrderInput>({
   firstName: "",
   lastName: "",
@@ -175,18 +186,6 @@ const userInfo = reactive<OrderInput>({
   address3: "",
   prefecture: "",
 });
-
-// 必須キーを明示
-const REQUIRED_FIELDS = [
-  "firstName",
-  "lastName",
-  "phoneNumber",
-  "postalCode",
-  "address1",
-  "address2",
-  "address3",
-  "prefecture",
-] as const;
 
 const inputClass = ref(
   "block rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -231,15 +230,15 @@ console.log("todata is:" + JSON.stringify(todoData.value));
 const isBlank = (v: unknown): boolean =>
   v == null || (typeof v === "string" && v.trim() === "");
 
-// userInfo のどれか1つでも空なら true
-const hasBlankUserInfo: (u: OrderInput) => boolean = (u: OrderInput) =>
-  REQUIRED_FIELDS.some((k) => isBlank((u as Record<string, unknown>)[k]));
+function isAnyFieldEmpty(userInfo: OrderInput): boolean {
+  return Object.values(userInfo).some((value) => value === "");
+}
 
 let ModalFlg = ref<boolean>(false);
 const goPurchaseDetails = () => {
-  if (hasBlankUserInfo(userInfo)) {
+  if (isAnyFieldEmpty(userInfo)) {
     validateMsg.value = true;
-    console.log("hasBlankUserInfo(userInfo)", hasBlankUserInfo(userInfo));
+    console.log("isAnyFieldEmpty(userInfo)", isAnyFieldEmpty(userInfo));
     return;
   } else {
     ModalFlg.value = true;
@@ -254,13 +253,6 @@ const router = useRouter();
 const onConfirm = () => {
   console.log("onConfirmが押下されました");
   store.setUserInfo(userInfo);
-  console.table(
-    REQUIRED_FIELDS.map((k) => ({
-      field: k,
-      val: JSON.stringify(store.$state[k as keyof typeof store.$state]),
-      blank: isBlank(store.$state[k as keyof typeof store.$state]),
-    }))
-  );
   router.push("/");
 };
 
@@ -270,7 +262,7 @@ function onCancel() {
 
 watchEffect(() => {
   userInfo.prefecture = radio.value;
-  console.log(`userInfo:${JSON.stringify(userInfo)}`);
-  console.log("ModalFlg", ModalFlg);
+  console.log(`watchEffect_userInfo:${JSON.stringify(userInfo)}`);
+  console.log("watchEffect_ModalFlg", ModalFlg);
 });
 </script>
