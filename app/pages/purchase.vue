@@ -69,7 +69,7 @@
 
           <div class="flex gap-3 py-2">
             <label class="text-gray-400">番地 </label
-            ><lavel class="text-red-500 font-medium">必須</lavel>
+            ><label class="text-red-500 font-medium">必須</label>
           </div>
 
           <p>
@@ -159,26 +159,6 @@
 </template>
 
 <script setup lang="ts" >
-/* 
-※最後に確認
-・必要な処理を全てチェックしたか？
-・AIにRV
-・Kaitakuを参考にする
-・KindleでNuxtを体系的に学習
-例：エラーハンドリング処理
-
-
-設計：
-
-・購入確認内容ダイアログへのデータ受け渡し
-    - psopsで渡す ?
-    - Storeには保存する？
-
-・ダイアログは共通機能化？
-    - Udemyに確かダイアログあったはず
-    - MSG もどこかに定数として置いておく
-
-*/
 import { ref, reactive, isRef, watchEffect, computed } from "vue";
 import axios from "axios";
 import { OrderInputSchema, type OrderInput } from "~/composables/order";
@@ -195,6 +175,18 @@ const userInfo = reactive<OrderInput>({
   address3: "",
   prefecture: "",
 });
+
+// 必須キーを明示
+const REQUIRED_FIELDS = [
+  "firstName",
+  "lastName",
+  "phoneNumber",
+  "postalCode",
+  "address1",
+  "address2",
+  "address3",
+  "prefecture",
+] as const;
 
 const inputClass = ref(
   "block rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -216,22 +208,12 @@ const ModalClass = ref(
   "rounded-md border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700"
 );
 
-/* 
-- Storeに保存して遷移先(ダイアログ)で取得する.
-- 戻る押下時に何か値を保存していた場合は再度反映する 
-*/
-
 const props = defineProps({
   testPs: String,
   indexToPurchase: String,
 });
 
-//const
 const radio = ref("クレジットカード(Visa,MasterCard,JCB, American Express)");
-// const address1 = ref("")
-/* 
-API取得して表示するのか? > 都道府県のデータはNuxt Contentで静的データを読み込むのか？ 　
-*/
 const todoData = ref(null);
 const validateMsg = ref(false);
 
@@ -245,12 +227,14 @@ try {
   console.log("e" + e);
 }
 console.log("todata is:" + JSON.stringify(todoData.value));
-const hasBlankUserInfo = (userInfo: OrderInput): boolean => {
-  // 空文字 or 空白のみを空扱いにする場合は trim()
-  return (Object.values(userInfo) as unknown[]).some(
-    (v) => String(v ?? "").trim() === ""
-  );
-};
+// 空判定：null/undefined/""/空白のみ を true
+const isBlank = (v: unknown): boolean =>
+  v == null || (typeof v === "string" && v.trim() === "");
+
+// userInfo のどれか1つでも空なら true
+const hasBlankUserInfo: (u: OrderInput) => boolean = (u: OrderInput) =>
+  REQUIRED_FIELDS.some((k) => isBlank((u as Record<string, unknown>)[k]));
+
 let ModalFlg = ref<boolean>(false);
 const goPurchaseDetails = () => {
   if (hasBlankUserInfo(userInfo)) {
@@ -259,6 +243,7 @@ const goPurchaseDetails = () => {
     return;
   } else {
     ModalFlg.value = true;
+    validateMsg.value = false;
     console.log(`goPurchaseDetails_ModalFlg:${ModalFlg}`);
   }
 };
@@ -269,6 +254,13 @@ const router = useRouter();
 const onConfirm = () => {
   console.log("onConfirmが押下されました");
   store.setUserInfo(userInfo);
+  console.table(
+    REQUIRED_FIELDS.map((k) => ({
+      field: k,
+      val: JSON.stringify(store.$state[k as keyof typeof store.$state]),
+      blank: isBlank(store.$state[k as keyof typeof store.$state]),
+    }))
+  );
   router.push("/");
 };
 

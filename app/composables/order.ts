@@ -8,9 +8,9 @@ TypeScriptの型安全をサポートするためのバリデーションライ�
 const schema = z.string().min(5, "5文字以上の文字列を要求しています");
 
 try {
-  schema.parse("test"); // 失敗します
+  schema.parse("order.ts_test"); // 失敗します
 } catch (e) {
-  console.error(e.errors); // エラー情報が出力されます
+  console.error("order.ts_e", e); // エラー情報が出力されます
 }
 
 export const OrderInputSchema = z.object({
